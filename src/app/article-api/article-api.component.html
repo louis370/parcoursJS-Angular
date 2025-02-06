@@ -1,0 +1,11 @@
+<div class="container">
+    <h1 class="my-5">Les articles API</h1>
+
+    <div class="mt-5">
+        <p class="text-end">
+            <a [routerLink]="['/create-api']" routerLinkActive="router-link-active" class="btn btn primary">Ajouter</a>
+
+            <app-article *ngFor="let article of articles" [article]="article"></app-article>
+        </p>
+    </div>
+</div>

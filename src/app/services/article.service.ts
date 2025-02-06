@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Article } from '../models/article';
+import { ArticleApiComponent } from '../article-api/article-api.component';
+import { ArticleApi } from '../models/article-api';
 
 @Injectable({
   providedIn: 'root'
@@ -273,5 +275,89 @@ store(title:string, category:string, price:number, image:string, description:str
     }
 
     this.articles.unshift(article)
+}
+
+update(id:number, title:string, category:string, price:number, image:string, description:string, rate:number, count:number){
+    let index = this.articles.findIndex(article => article.id == id)
+
+    this.articles[index].title = title
+    this.articles[index].category = category
+    this.articles[index].price = price
+    this.articles[index].image = image
+    this.articles[index].description = description
+    this.articles[index].rating.rate = rate
+    this.articles[index].rating.count = count
+}
+
+destroy(id:number){
+    let index = this.articles.findIndex(article => article.id == id)
+
+    this.articles.splice(index, 1)
+}
+
+findAll():Promise<Article[]> {
+    let data = fetch('https://fakestoreapi.com/products').then(response => response.json())
+
+    return data
+}
+
+async storeApi(title:string, category:string, price:number, image:string, description:string):Promise<ArticleApi> {
+    const article = {
+        title:title,
+        price:price,
+        description:description,
+        category:category,
+        image:image,
+        rating:{
+            rate : 0,
+            count: 0
+        }
+    }
+
+    let rep = await fetch('https://fakestoreapi.com/products', {
+        method:"POST",
+        body:JSON.stringify(article)
+    })
+    .then(response => response.json())
+
+    const data = {
+        id: rep.id,
+        ...article
+    }
+
+    return data
+}
+
+updateApi(id:number, title:string, category:string, price:number, image:string, description:string, rate:number, count:number ):Promise<ArticleApi> {
+
+    const index = this.articles.findIndex(article => article.id == id)
+    const article = {
+        title:title,
+        price:price,
+        description:description,
+        category:category,
+        image:image,
+        rating:{
+            rate : rate,
+            count: count
+        }
+    }
+
+    let rep = fetch('https://fakestoreapi.com/products' + id, {
+        method:"PUT",
+        body:JSON.stringify(article)
+    })
+    .then(response => response.json())
+
+    return rep
+}
+
+destroyApi(id:number):Promise<ArticleApi>{
+    let rep = fetch('https://fakestoreapi.com/products' + id,{
+        method:"DELETE",
+
+    }).then(res => res.json())
+
+    return rep
 }
 }

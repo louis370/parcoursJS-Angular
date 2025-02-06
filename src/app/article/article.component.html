@@ -15,7 +15,9 @@
             </div>
             <div class="col"><h4 class="text-danger">{{ article.price }} $</h4></div>
             <div class="col">
-              <a class="btn btn-primary" [routerLink]="['articles', article.id]">Voir plus</a>
+              <a class="btn btn-primary mx-2" [routerLink]="['articles', article.id]" routerLinkActive="router-link-active">Voir plus</a>
+              <a class="btn btn-primary mx-2" [routerLink]="['edit', article.id]" routerLinkActive="router-link-active">Modifier</a>
+              <a (click)="delete(article.id)" class="btn btn-danger mx-2">Supprimer</a>
             </div>
         </div>
       </div>
